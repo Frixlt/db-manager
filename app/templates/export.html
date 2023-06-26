@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>export</title>
+  <!-- <link rel="stylesheet" href="/static/css/styles_bd.css" type="text/css"> -->
+</head>
+<style>
+  /* export styles */
+  .export form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .export label {
+    display: block;
+    margin-bottom: 10px;
+    width: calc(50% - 10px);
+    box-sizing: border-box;
+  }
+
+  .export input[type="checkbox"] {
+    display: none;
+  }
+
+  .export .checkbox-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #eee;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .export input[type="checkbox"]:checked+.checkbox-button {
+    background-color: #4caf50;
+    color: #fff;
+  }
+
+  .export_button {
+    border: 1px solid #ccc;
+    background-color: #5046a7;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .export_button:hover {
+    background-color: #0d17a3;
+  }
+
+  /* обьединиение кнопки и поля для ввода */
+  .united {
+    display: inline-flex;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .united input,
+  .united button {
+    display: block;
+    padding: 8px 10px;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    box-sizing: border-box;
+  }
+
+  .united input {
+    border: 1px solid #ccc;
+    border-right: 0;
+    border-radius: 6px 0 0 6px;
+  }
+
+  .united button {
+    border: 1px solid #ccc;
+    border-radius: 0 6px 6px 0;
+    background-color: #4caf50;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .united button:hover {
+    background-color: #3e8e41;
+  }
+</style>
+<script>
+  function check() {
+    var check = document.getElementsByTagName('input');
+    for (var i = 0; i < check.length; i++) {
+      if (check[i].type == 'checkbox') {
+        check[i].checked = true;
+      }
+    }
+  }
+
+  function uncheck() {
+    var uncheck = document.getElementsByTagName('input');
+    for (var i = 0; i < uncheck.length; i++) {
+      if (uncheck[i].type == 'checkbox') {
+        uncheck[i].checked = false;
+      }
+    }
+  }
+</script>
+
+<body>
+  <div class="export"> <!-- Added div with class "export" -->
+    <h1>Выберите столбцы для экспорта:</h1>
+    <form method="post">
+      <label>
+        <input type="button" onclick="check()" class="export_button" value="выбрать все">
+      </label>
+      <label>
+        <input type="button" onclick="uncheck()" class="export_button" value="убрать все">
+      </label>
+      <label>
+        <input type="checkbox" checked name="colums" value="colums">
+        <span title="выписать столбцы в начало" class="checkbox-button">colums</span>
+      </label>
+      {% for i in colums %}
+      <label>
+        <input type="checkbox" checked name="{{i}}" value="{{i}}">
+        <span class="checkbox-button">{{i}}</span>
+      </label>
+      {% endfor %}
+      <!-- <label>
+      <div class="united">
+        <input type="text" placeholder="кол-во акаунтов для экспорта" title="кол-во акаунтов для экспорта(начиная с 1, оставте это поле пустым если хотите экспортировать всю бд)" name="selector">
+      </div>
+    </label> -->
+      {% if dlc %}
+      <label></label>
+      {% endif %}
+      <label>
+        <div class="united">
+          <input type="text" placeholder="знак-разделитель" title="знак-разделитель" name="division">
+          <button type="submit">Отправить</button>
+        </div>
+      </label>
+    </form>
+  </div>
+</body>
+
+</html>

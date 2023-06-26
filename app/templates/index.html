@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{{url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <title>Document</title>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
+  <script>
+    var socket = io.connect();
+    socket.on('connect', function () {
+      setStatus('connected');
+    });
+
+    socket.on('disconnect', function () {
+      setStatus('disconnected');
+    });
+
+    socket.on('notification', function (name, description) {
+      showNotification(name, description)
+    });
+
+    socket.on('export', function (data) {
+      var textarea = document.querySelector('.export .textarea-container textarea');
+      textarea.value = data.join("\n");
+    })
+
+    function redactRow(event){
+      var colum = event.target.id
+      if (document.getElementById("table1").style.display == 'table'){
+        if (document.getElementById("replaceColums").checked){
+          {% for i in colums[1:] %}
+            var field = document.getElementById(colum+"_{{i}}")
+            var target_field = document.getElementById("change_data_{{i}}").value
+            if (target_field != ""){
+              field.innerHTML = target_field
+            }
+          {% endfor %}
+        }
+        else {
+          {% for i in colums[1:] %}
+            {% if config[i]["data_type"] == "int" %}
+              var field = document.getElementById(colum+"_{{i}}")
+              field.innerHTML = Number(field.innerHTML) + Number(document.getElementById("change_data_{{i}}").value)
+            {% endif %}
+          {% endfor %}
+        }
+        if (document.getElementById("deleteColums").checked){
+          id = document.getElementById(colum+"_id")
+          if (id.innerHTML[id.innerHTML.length-1] != "D"){
+            id.innerHTML += "D"
+          }
+        }
+      }
+      else{
+        {% for i in colums[1:] %}
+          {% if config[i]["replace_permanent"] == "1" %}
+            var field = document.getElementById(colum+"_{{i}}")
+            field.innerHTML = document.getElementById("change_data_{{i}}").value
+          {% endif %}
+        {% endfor %}
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div class="menu-container">
+    <div class="menu-btn" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <span class="menu-label">Меню:</span>
+    <ul class="menu-items">
+      <li onclick="changeTab(1)" id="menu-tab-button-1" class="menu-tab-button active">таблица</li>
+      <li onclick="changeTab(2)" id="menu-tab-button-2" class="menu-tab-button">↑export↑</li>
+      <li onclick="changeTab(3)" id="menu-tab-button-3" class="menu-tab-button">↓import↓</li>
+      <li onclick="changeTab(4)" id="menu-tab-button-4" class="menu-tab-button">Настройки</li>
+    </ul>
+  </div>
+  <!-- 1 вкладка -->
+  <div class="tab-content active" id="tab-content-1">
+    <div class="tools_general_base">
+      <div class="tools-btn tools-button" onclick="toggleTools()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="tools-container">
+        <div class="tools-label">Инструменты:</div>
+        <ul class="tools-items">
+          <li onclick="sendData()">Сохранить</li>
+          <li onclick="socket.emit('backup')">Бэкап</li>
+          <li onclick="openNewWin('/download')">Скачать</li>
+          <li class="edit" id="editButton1" onclick="showTable('table1', 'editButton1')">Редактировать всю строчку</li>
+        </ul>          
+        <table id="table1" class="tools-table">
+          <thead>
+            <tr>
+              <th>название столбца</th>
+              <th>данные для редактирования:</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in colums[1:] %}
+              <tr>
+                <th>{{i}}</th>
+                <td>
+                  <input type="text" id="change_data_{{i}}" value="{{config[i]['replacer_default_data']}}">
+                </td>
+              </tr>
+            {% endfor %}
+            <tr>
+              <td>
+                <label class="checkbox-button">
+                  <input type="checkbox" unchecked name="replaceColums" id="replaceColums" value="replaceColums">
+                  <span title="заменять значения всей строки" class="button">заменять значения?</span>
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-button">
+                  <input type="checkbox" unchecked name="deleteColums" id="deleteColums" value="deleteColums">
+                  <span title="режим удаления строк" class="button">режим удаления строк</span>
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </tools>
+    <div class="general_base">
+      <table id="general_base">
+        <thead>
+          <tr>
+            {% for i in colums %}
+            <th title="{{i}}", {{config[i]["table_styles"]}}>{{i}}</th>
+            {% endfor %}
+            <th>
+              <span id="status" class="disconnected">disconnected</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {%for i in data%}
+          <tr>
+            <td>
+              <div id="{{i[0]}}_id">{{i[0]}}</div>
+            </td>
+            {% for j,l in zip(i[1:],colums[1:]) %}
+            <td>
+              <div contenteditable id="{{i[0]}}_{{l}}">{{j}}</div>
+            </td>
+            {%endfor%}
+            <td class="button-cell">
+              <button class="table-button" id={{i[0]}} onclick="redactRow(event)">+</button>
+            </td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- 2 вкладка -->
+  <div class="tab-content" id="tab-content-2">
+    <div class="export">
+      <div class="left">
+          <div class="window">
+              <div class="tile-container" id="exportWindowTiles" ondrop="exportDrop(event)" ondragover="allowDrop(event)">
+                  <!-- Место для перемещаемых плиток -->
+              </div>
+              <div>
+                  <label class="value">Кол-во акаунтов для экспорта:
+                      <input type="number" id="limit-accounts" min="0" max="{{data|length}}" title="пустое поле=импорт всех данных" placeholder="всего строк:{{data|length}}">
+                  </label>
+                  <label class="checkbox-button">
+                      <input type="checkbox" unchecked name="insertColums" id="insertColums" value="insertColums">
+                      <span title="выписать столбцы в начало" class="button">Выписать названия столбцов в начало</span>
+                  </label>
+              </div>
+          </div>
+          <div class="tile-container" id="exportTiles">
+            {% for i in colums %}
+            <div class="tile" draggable="true" id="{{i}}" ondragstart="drag(event)" onclick="exportMoveTile(this)">{{i}}</div>
+            {% endfor %}
+          </div>
+          <div class="united">
+            <input type="text" placeholder="Знак-разделитель по умолчанию ':'" title="Знак-разделитель по умолчанию':'" name="export-divider">
+              <button onclick="export_import_Tiles(true)" >Экспорт</button>
+          </div>
+      </div>
+      <div class="right">
+          <div class="textarea-container">
+              <textarea placeholder="Экспортированные данные отображатся здесь:"></textarea>
+          </div>
+      </div>
+  </div>
+  </div>
+  <div class="tab-content" id="tab-content-3">
+    <div class="import">
+      <div class="left">
+          <div class="window">
+              <div class="tile-container" id="importWindowTiles" ondrop="importDrop(event)" ondragover="allowDrop(event)">
+                  <!-- Место для перемещаемых плиток -->
+              </div>
+              расположите в столбцы в этом поле, соблюдая порядок данных для импорта
+          </div>
+          <div class="tile-container" id="importTiles">
+            {% for i in colums[1:] %}
+            <div class="tile" draggable="true" id="{{i}}" ondragstart="drag(event)" onclick="importMoveTile(this)">{{i}}</div>
+            {% endfor %}
+          </div>
+          <div class="united">
+              <input type="text" placeholder="Знак-разделитель по умолчанию ':'" title="Знак-разделитель по умолчанию':'" name="import-divider">
+              <button onclick="export_import_Tiles(false)" >Импорт</button>
+          </div>
+      </div>
+      <div class="right">
+          <div class="textarea-container">
+              <textarea placeholder="Данные для импорта вставить сюда"></textarea>
+          </div>
+      </div>
+  </div>
+  </div>
+  <div class="tab-content" id="tab-content-4">
+    <div class="settings">
+      <h2>Настройки</h2>
+      Тема:
+      <label class="theme_switch_label">
+        <input type="checkbox" onchange="toggleTheme()" style="opacity: 0;">
+        <span class="theme_switch_slider"></span>
+      </label>
+    </div>
+  </div>
+</body>
+</html>

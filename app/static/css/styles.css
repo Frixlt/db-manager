@@ -1,0 +1,868 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #F5F5F5;
+  margin: 0;
+  padding: 0;
+}
+
+.dark body{
+  background-color: #000;
+  color: #fff;
+}
+
+.settings .theme_switch_label {
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  height: 34px;
+  border-radius: 17px;
+  z-index: 1;
+}
+
+ .settings .theme_switch_slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 17px;
+}
+
+.settings .theme_switch_slider:before {
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: .4s;
+}
+
+.settings .theme_switch_slider:before {
+  /* переключение на дневную тему */
+  background-image: url("../img/test/day.png");
+  left: 20%;
+}
+
+.settings .theme_switch_slider:after {
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  background-color: white;
+  border-radius: 50%;
+  top: 4px;
+  left: 4px;
+  transition: .4s;
+}
+
+.settings  input:checked+.theme_switch_slider:before {
+  /* переключение на ночную тему */
+  background-image: url("../img/test/night.png");
+  left: -20%;
+}
+
+.settings input:checked+.theme_switch_slider:after {
+  left: calc(100% - 30px);
+}
+
+.settings input:checked+.theme_switch_slider {
+  background-color: #e7e2e2;
+}
+
+/* Стили для кнопки-меню */
+.menu-container {
+  user-select: none;
+  position: fixed;
+  background-color: #44444452;
+  border-radius: 0px 10px 10px;
+  padding: 4px;
+  width: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  border: 1px solid #fdf3f3;
+  transition: width 0.3s;
+  z-index: 2;
+  left: 0;
+  top: 0;
+}
+
+.menu-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.3s;
+  align-self: flex-start;
+}
+
+.menu-btn span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #000;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* Стили для вертикальных линий */
+.menu-btn.active {
+  transform: rotate(90deg);
+}
+
+/* Стили для растягивания контейнера */
+.menu-container.active {
+  width: 20%;
+  min-width: 80px;
+  max-width: 20%;
+  height: 100%;
+}
+
+/* Дополнительные стили для надписи "Меню:" */
+.menu-label {
+  display: none;
+  margin-left: 5px;
+  color: #FFF;
+  font-weight: bold;
+  transition: opacity 0.3s;
+  align-self: flex-start;
+}
+
+.menu-container.active .menu-label {
+  display: inline;
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+/* Дополнительные стили для пунктов меню */
+.menu-items {
+  width: 100%;
+  display: none;
+  margin-top: 5px;
+  color: #000000;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  padding: 0;
+  z-index: 2;
+}
+
+.menu-container.active .menu-items {
+  display: block;
+}
+
+.menu-items li {
+  list-style: none;
+  margin-bottom: 1px;
+}
+
+/* Дополнительные стили для содержимого вкладок */
+.tab-content {
+  display: none;
+  padding: 1px;
+  padding-left: 5px;
+  background-color: #dbd8d8;
+  border-radius: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Дополнительные стили для кнопок вкладок */
+.menu-tab-button {
+  width: 100%;
+  display: inline-block;
+  padding: 5px 0px;
+  border-radius: 10px;
+  margin-right: 5px;
+  background-color: #ffffff;
+  padding-left: 0px;
+  color: #080808;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.menu-tab-button.active {
+  background-color: #d47e7e;
+}
+/* Стили для темной темы */
+.dark .menu-container {
+  background-color: #66666663;
+  border-color: rgb(255, 255, 255);
+}
+
+.dark .menu-btn span {
+  background-color: #ff0000;
+}
+
+.dark .menu-items {
+  background-color: #333;
+  color: #fff;
+}
+
+.dark .tab-content {
+  background-color: #222;
+  color: #fff;
+}
+
+.dark .menu-tab-button {
+  background-color: #888;
+  color: #fff;
+}
+
+.dark .menu-tab-button.active {
+  background-color: #d47e7e;
+}
+/* таблица */
+.general_base .connected {
+  color: green;
+}
+
+.general_base .disconnected {
+  color: red;
+}
+
+.general_base table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.general_base table,
+.general_base th,
+.general_base td {
+  border: 1px solid #ddd;
+  height: 5px;
+
+}
+
+.general_base th {
+  background-color: #f2f2f2;
+  padding: 8px;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.general_base td {
+  padding: 1%;
+  word-break: break-all;
+  white-space: nowrap;
+  position: relative;
+}
+
+.general_base td div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.general_base td div.expanded {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  z-index: 1;
+  white-space: normal;
+  background-color: #ffffff;
+}
+
+.general_base tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.general_base tr:hover {
+  background-color: #e6bebe;
+}
+
+/* Стили для кнопки */
+.general_base td.button-cell {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.general_base td.button-cell button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 1px solid; 
+  border-color: #000000; 
+  background-color: #f2f2f26e;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.general_base td.button-cell button:hover {
+  background-color: #9b7d7d;
+}
+
+.general_base td.button-cell button:active {
+  background-color: #c0c0c0;
+}
+
+.dark .general_base td.button-cell button {
+  background-color: #222222;
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.dark .general_base td.button-cell button:hover {
+  background-color: #444444;
+}
+
+.dark  .general_base th {
+  background-color: #222222;
+  color: #ffffff;
+}
+
+.dark .general_base  td {
+  border-color: #555555;
+}
+
+.dark  .general_base tr:nth-child(even) {
+  background-color: #444444;
+}
+
+.dark .general_base  tr:hover {
+  background-color: #666666;
+}
+
+.dark  .general_base td div.expanded {
+  background-color: #555555;
+}
+/* меню инструментов */
+.tools_general_base {
+  position: relative;
+}
+
+.tools_general_base .tools-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.3s;
+  z-index: 2;
+}
+
+.tools_general_base .tools-btn span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #000;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.tools_general_base .tools-btn.active {
+  transform: rotate(90deg);
+}
+
+.tools_general_base .tools-container {
+  display: none;
+  position: fixed;
+  top: 40px;
+  right: 10px;
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.tools_general_base .tools-container.active {
+  display: block;
+}
+
+.tools_general_base .tools-label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.tools_general_base .tools-items {
+  padding-left: 0;
+  user-select: none;
+}
+
+.tools_general_base .tools-items li {
+  list-style: none;
+  padding: 5px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.tools_general_base .tools-items li:hover {
+  background-color: #e6e6e6;
+}
+
+/* Стили для таблицы */
+.tools_general_base .tools-table {
+  border-spacing: 0;
+  display: none;
+  margin-top: 10px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tools_general_base .tools-table th,
+.tools_general_base .tools-table td {
+  padding: 0;
+  border: 1px solid #ddd;
+}
+
+.tools_general_base .tools-table th {
+  background-color: #f2f2f2;
+  padding: 8px;
+}
+
+.tools_general_base .tools-table input[type="text"] {
+  border: none; 
+  background-color: transparent; 
+  width: 100%;
+  box-sizing: border-box; 
+  padding: 8px; 
+}
+
+.highlight {
+  background-color: #36b346;
+}
+
+.tools_general_base .checkbox-button label {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.tools_general_base .checkbox-button input[type="checkbox"] {
+  display: none;
+}
+
+.tools_general_base .checkbox-button .button {
+  display: inline-block;
+  padding: 10px 20px;
+  user-select: none;
+  background-color: #a3a1a1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tools_general_base .checkbox-button input[type="checkbox"]:checked+.button {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.dark .tools_general_base .tools-btn span {
+  background-color: #946161;
+}
+
+.dark .tools_general_base .tools-container {
+  background-color: #555;
+  color: #fff;
+}
+
+.dark .tools_general_base .tools-label {
+  color: #fff;
+}
+
+/* .dark .tools_general_base .tools-items li {
+  background-color: #444;
+} */
+
+.dark .tools_general_base .tools-items li:hover {
+  background-color: #666;
+}
+
+.dark .tools_general_base .tools-table {
+  border: 1px solid #888;
+}
+
+.dark .tools_general_base .tools-table th {
+  background-color: #666;
+  color: #fff;
+}
+
+.dark .tools_general_base .tools-table input[type="text"] {
+  color: #fff;
+}
+
+.dark .tools_general_base .checkbox-button .button {
+  background-color: #777;
+  color: #fff;
+}
+
+.dark .tools_general_base .checkbox-button input[type="checkbox"]:checked + .button {
+  background-color: rgb(153, 110, 30);
+  color: #000;
+}
+/* стили для уведомлений */
+.popup {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 300px;
+  background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  transform: translateX(-100%);
+  color: #000000;
+  z-index: 1;
+}
+
+.dark .popup {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.popup.show {
+  transform: translateX(0);
+}
+
+.popup .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+/* import вкладка */
+.import {
+  display: flex;
+  background-color: #FFFFFF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.import .left {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  user-select: none;
+  flex-direction: column;
+}
+
+.import .right {
+  flex: 1;
+  background-color: #F9F9F9;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.import .window {
+  border: 1px dashed #CCCCCC;
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.import .tile-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.import .tile {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  cursor: move;
+  font-weight: bold;
+  color: #333333;
+  transition: background-color 0.3s;
+}
+
+.import .tile:hover {
+  background-color: #F1F1F1;
+  transform: scale(1.05);
+}
+
+.import .textarea-container {
+  position: relative;
+  height: 100%;
+  flex-grow: 1;
+  padding: 8px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+}
+
+.import .textarea-container textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 8px;
+  box-sizing: border-box;
+  color: #333333;
+}
+
+.import .united {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.import .united input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px 0 0 4px;
+  background-color: #FFFFFF;
+  color: #333333;
+}
+
+.import .united button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.import .united button:hover {
+  background-color: #45a049;
+}
+/* export */
+
+.export {
+  display: flex;
+  background-color: #FFFFFF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.export .left {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  user-select: none;
+  flex-direction: column;
+}
+
+.export .right {
+  flex: 1;
+  background-color: #F9F9F9;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.export .window {
+  border: 1px dashed #CCCCCC;
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.export .tile-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.export .tile {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  cursor: move;
+  font-weight: bold;
+  color: #333333;
+  transition: background-color 0.3s;
+}
+
+.export .tile:hover {
+  background-color: #F1F1F1;
+  transform: scale(1.05);
+}
+
+.export .textarea-container {
+  position: relative;
+  height: 100%;
+  flex-grow: 1;
+  padding: 8px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+}
+
+.export .textarea-container textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 8px;
+  box-sizing: border-box;
+  color: #333333;
+}
+
+.export .united {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.export .united input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px 0 0 4px;
+  background-color: #FFFFFF;
+  color: #333333;
+}
+
+.export .united button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.export .united button:hover {
+  background-color: #45a049;
+}
+
+.export .checkbox-button label {
+  display: block;
+  margin-bottom: 10px;
+  width: calc(50% - 10px);
+  box-sizing: border-box;
+}
+
+.export .checkbox-button input[type="checkbox"] {
+  display: none;
+}
+
+.export .checkbox-button .button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #a3a1a1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.export .checkbox-button input[type="checkbox"]:checked+.button {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.export .value {
+  display: inline-block;
+  margin-bottom: 16px;
+}
+.export .value input {
+  padding: 8px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  color: #333333;
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.export .value input::placeholder {
+  color: #999999;
+}
+/* dark */
+.dark .left {
+  background-color: #333333;
+  border-right: 1px solid #555555;
+}
+
+.dark .right {
+  background-color: #444444;
+}
+
+.dark .tile {
+  background-color: #555555;
+  color: #FFFFFF;
+  border-color: #777777;
+}
+
+.dark .tile.dragging {
+  opacity: 0.7;
+}
+
+.dark .export_value input {
+  background-color: #333333;
+  color: #FFFFFF;
+  border: 1px solid #555555;
+}
+
+.dark .checkbox-button .button {
+  background-color: #161616;
+  color: #FFFFFF;
+}
+
+.dark .checkbox-button input[type="checkbox"]:checked + .button {
+  background-color: #4CAF50;
+}
+
+.dark .textarea-container textarea {
+  background-color: #333333;
+  color: #FFFFFF;
+  border: 1px solid #555555;
+}
