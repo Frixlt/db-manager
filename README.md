@@ -1,6 +1,6 @@
 # DB Manager
 
-[Читать русскую версию](readme.ru.md)
+[Читать русскую версию](README.ru.md)
 
 The "DB Manager" project was initially designed as a simple database management tool. However, during development, many security vulnerabilities were discovered, along with a significant amount of new knowledge that had to be learned to implement it fully.
 
