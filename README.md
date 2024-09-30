@@ -18,5 +18,3 @@ Additionally, the project lacks a `requirements.txt` file, which complicates ins
 ## Additional Information
 
 This project is deprecated and no longer maintained.
-
-Refer to the [Russian version of README](readme.ru.md).
